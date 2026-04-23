@@ -78,6 +78,11 @@ export function DashboardPuskesauPage() {
         <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Perlu revisi</p><p className="text-xl font-bold">{monthly.revisi}</p></article>
         <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Locked</p><p className="text-xl font-bold">{monthly.locked}</p></article>
       </section>
+      <section className="grid gap-3 md:grid-cols-3">
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Ringkasan submission bulanan</p><p className="text-sm font-semibold">Masuk {monthly.masuk} dari {monthly.wajib} lampiran wajib.</p></article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Unit belum lengkap</p><p className="text-2xl font-bold">{monthly.belumMasuk}</p></article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Status review per lampiran</p><p className="text-sm font-semibold">Revisi: {monthly.revisi} • Approved: {monthly.approved}</p></article>
+      </section>
       <KPIGrid metrics={data.metrics} freshness={data.freshness} />
       <FilterToolbar filters={filters} onChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))} wilayahOptions={data.wilayahOptions} />
       {chartLayout}
