@@ -1,5 +1,10 @@
 import { NavLink } from 'react-router-dom';
 import { Activity, ClipboardList, Hospital, ShieldCheck, FileOutput } from 'lucide-react';
+import silarasLogo from '@/assets/silaras-logo.svg';
+
+type SidebarProps = {
+  onNavigate?: () => void;
+};
 
 const links = [
   { to: '/dashboard/puskesau', label: 'Dashboard Pusat', icon: Activity },
@@ -9,15 +14,23 @@ const links = [
   { to: '/exports', label: 'Export', icon: FileOutput },
 ];
 
-export function Sidebar() {
+export function Sidebar({ onNavigate }: SidebarProps) {
   return (
-    <aside className="min-h-screen w-72 bg-gradient-to-b from-primary to-slate-900 p-5 text-white">
-      <h1 className="mb-8 text-2xl font-bold">SiLaras</h1>
+    <aside className="h-full w-72 overflow-y-auto bg-gradient-to-b from-primary to-slate-900 p-5 text-white">
+      <div className="mb-8 flex items-center gap-3">
+        <img src={silarasLogo} alt="Logo SiLaras" className="h-10 w-10 rounded-xl bg-white/10 p-1" />
+        <div>
+          <h1 className="text-2xl font-bold leading-tight">SiLaras</h1>
+          <p className="text-xs text-white/80">Sistem Laporan RSAU</p>
+        </div>
+      </div>
+
       <nav className="space-y-2">
         {links.map((link) => (
           <NavLink
             key={link.to}
             to={link.to}
+            onClick={onNavigate}
             className={({ isActive }) =>
               `flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition ${
                 isActive ? 'bg-white/20 font-semibold' : 'hover:bg-white/10'
