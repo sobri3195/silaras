@@ -35,6 +35,36 @@ Audit trail tersedia via:
 - `report_status_logs`
 - `activity_logs`
 
+## Report Engine Modular (LocalStorage Demo)
+
+SiLaras kini memiliki **modul report engine** untuk laporan bulanan lampiran RS/faskes yang bersifat modular dan scalable.
+
+### Layer arsitektur
+- `report definitions`: metadata jenis laporan (`ReportType`)
+- `report templates`: template dinamis per laporan (`ReportTemplate`)
+- `report storage`: repository localStorage (`reportEngineStorage`)
+- `report renderer`: renderer form dinamis (`DynamicReportRenderer`)
+- `report validator`: rule engine validasi (`validateReportItems`)
+- `report workflow service`: save draft, submit, review, revision, approve, lock (`reportWorkflowService`)
+
+### Route baru
+- `/reports/monthly`
+- `/reports/monthly/:reportTypeCode`
+- `/reports/monthly/:reportTypeCode/:submissionId`
+- `/verification/monthly`
+- `/master/report-types`
+
+### Kapabilitas demo
+- 18 jenis report type bulanan (seeded)
+- template dasar untuk setiap report type
+- submission dummy dengan status draft/submitted/revision_needed/approved
+- autosave + submit + review notes + audit timeline
+- reset template/submission
+- export/import JSON engine
+- switch user demo
+- banner `Demo Local Mode`
+- dev panel isi localStorage engine
+
 ## Akun Demo
 - Admin Puskesau: `admin.puskesau@silaras.mil.id`
 - Admin RS: `admin.rs@silaras.mil.id`

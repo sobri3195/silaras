@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Activity, ClipboardList, Hospital, ShieldCheck, FileOutput, ScrollText } from 'lucide-react';
+import { Activity, ClipboardList, Hospital, ShieldCheck, FileOutput, ScrollText, Files, Shield, Database } from 'lucide-react';
 import silarasLogo from '@/assets/silaras-logo.svg';
 
 type SidebarProps = {
@@ -10,6 +10,9 @@ const links = [
   { to: '/dashboard/puskesau', label: 'Dashboard Pusat', icon: Activity },
   { to: '/dashboard/rs', label: 'Dashboard RS', icon: Hospital },
   { to: '/verification', label: 'Verifikasi', icon: ShieldCheck },
+  { to: '/reports/monthly', label: 'Laporan Bulanan', icon: Files },
+  { to: '/verification/monthly', label: 'Review Bulanan', icon: Shield },
+  { to: '/master/report-types', label: 'Master Report Types', icon: Database },
   { to: '/analytics', label: 'Analytics', icon: ClipboardList },
   { to: '/exports', label: 'Export', icon: FileOutput },
   { to: '/logs', label: 'User Logs', icon: ScrollText },

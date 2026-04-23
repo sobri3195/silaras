@@ -27,6 +27,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 import type { ReportStatus } from '@/types/domain';
+import { getMonthlySummary } from '@/features/reports/monthly/report-summary';
 
 export type RsWorkflowState =
   | 'not_started'
@@ -643,6 +644,7 @@ export function RsDashboardContent() {
 
   const mergedStatus = data.diseaseReport?.status ?? data.borReport?.status ?? 'draft';
   const editable = canEdit(dashboardState);
+  const monthly = getMonthlySummary(data.hospital.id);
   const checklist = [
     { label: 'Isi laporan BOR', done: !!data.borReport, cta: 'Isi BOR', onClick: () => (window.location.href = '/reports/bor') },
     { label: 'Isi 10 besar penyakit', done: !!data.diseaseReport, cta: 'Isi Penyakit', onClick: () => (window.location.href = '/reports/diseases') },
@@ -672,6 +674,14 @@ export function RsDashboardContent() {
       </header>
 
       <HospitalHeroSummary state={dashboardState} progress={progress} dueDate={data.activePeriod.due_date} status={mergedStatus} />
+      <section className="grid gap-3 md:grid-cols-3 xl:grid-cols-6">
+        <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Wajib</p><p className="text-lg font-bold">{monthly.wajib}</p></article>
+        <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Selesai</p><p className="text-lg font-bold">{monthly.masuk}</p></article>
+        <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Draft</p><p className="text-lg font-bold">{monthly.draft}</p></article>
+        <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Revisi</p><p className="text-lg font-bold">{monthly.revisi}</p></article>
+        <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Approved</p><p className="text-lg font-bold">{monthly.approved}</p></article>
+        <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Belum Masuk</p><p className="text-lg font-bold">{monthly.belumMasuk}</p></article>
+      </section>
 
       <QuickActionButtons
         onBor={() => (window.location.href = '/reports/bor')}

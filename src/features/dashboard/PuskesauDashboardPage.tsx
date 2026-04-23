@@ -12,6 +12,7 @@ import { FilterToolbar } from './components/FilterToolbar';
 import { VerificationQueueCard } from './components/VerificationQueueCard';
 import { usePuskesauDashboardData } from './hooks/usePuskesauDashboardData';
 import type { DashboardFilters, HospitalDashboardRecord } from './types';
+import { getMonthlySummary } from '@/features/reports/monthly/report-summary';
 
 const defaultFilters: DashboardFilters = {
   periodId: '2026-Q2', query: '', submitStatus: 'all', reviewStatus: 'all', borRange: 'all', wilayah: 'all', diseaseMode: 'normalized',
@@ -54,6 +55,7 @@ export function DashboardPuskesauPage() {
 
   if (data.isLoading) return <LoadingState />;
   if (data.error) return <ErrorState message="Gagal memuat data command center. Coba refresh." />;
+  const monthly = getMonthlySummary();
 
   return (
     <div className="space-y-4 pb-8">
@@ -70,6 +72,12 @@ export function DashboardPuskesauPage() {
       />
 
       <QuickActionsPanel />
+      <section className="grid gap-3 md:grid-cols-4">
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Laporan wajib bulan ini</p><p className="text-xl font-bold">{monthly.wajib}</p></article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Sudah masuk</p><p className="text-xl font-bold">{monthly.masuk}</p></article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Perlu revisi</p><p className="text-xl font-bold">{monthly.revisi}</p></article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft"><p className="text-xs text-slate-500">Locked</p><p className="text-xl font-bold">{monthly.locked}</p></article>
+      </section>
       <KPIGrid metrics={data.metrics} freshness={data.freshness} />
       <FilterToolbar filters={filters} onChange={(patch) => setFilters((prev) => ({ ...prev, ...patch }))} wilayahOptions={data.wilayahOptions} />
       {chartLayout}
