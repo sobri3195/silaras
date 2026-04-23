@@ -11,6 +11,11 @@ import { HospitalsMasterPage, PeriodsMasterPage, SettingsPage, UsersMasterPage }
 import { UserLogsPage } from '@/features/master-data/UserLogsPage';
 import { ExportsPage } from '@/features/dashboard/ExportsPage';
 import { ReportDetailPage } from '@/features/review/ReportDetailPage';
+import { MonthlyReportsListPage } from '@/features/reports/monthly/MonthlyReportsListPage';
+import { MonthlyReportFormPage } from '@/features/reports/monthly/MonthlyReportFormPage';
+import { MonthlySubmissionDetailPage } from '@/features/reports/monthly/MonthlySubmissionDetailPage';
+import { MonthlyVerificationPage } from '@/features/reports/monthly/MonthlyVerificationPage';
+import { ReportTypesMasterPage } from '@/features/reports/monthly/ReportTypesMasterPage';
 
 function Shell({ children }: { children: React.ReactNode }) {
   return <AppLayout>{children}</AppLayout>;
@@ -28,12 +33,17 @@ export function AppRouter() {
         <Route path="/dashboard/rs" element={<Shell><RsDashboardPage /></Shell>} />
         <Route path="/reports/bor" element={<Shell><BorFormPage /></Shell>} />
         <Route path="/reports/diseases" element={<Shell><DiseaseFormPage /></Shell>} />
+        <Route path="/reports/monthly" element={<Shell><MonthlyReportsListPage /></Shell>} />
+        <Route path="/reports/monthly/:reportTypeCode" element={<Shell><MonthlyReportFormPage /></Shell>} />
+        <Route path="/reports/monthly/:reportTypeCode/:submissionId" element={<Shell><MonthlySubmissionDetailPage /></Shell>} />
         <Route path="/reports/:hospitalId/:periodId" element={<Shell><ReportDetailPage /></Shell>} />
         <Route element={<RoleGuard allow={['admin_puskesau', 'reviewer_kotama']} />}>
           <Route path="/verification" element={<Shell><VerificationPage /></Shell>} />
+          <Route path="/verification/monthly" element={<Shell><MonthlyVerificationPage /></Shell>} />
           <Route path="/master/hospitals" element={<Shell><HospitalsMasterPage /></Shell>} />
           <Route path="/master/users" element={<Shell><UsersMasterPage /></Shell>} />
           <Route path="/master/periods" element={<Shell><PeriodsMasterPage /></Shell>} />
+          <Route path="/master/report-types" element={<Shell><ReportTypesMasterPage /></Shell>} />
         </Route>
         <Route path="/analytics" element={<Shell><AnalyticsPage /></Shell>} />
         <Route path="/settings" element={<Shell><SettingsPage /></Shell>} />

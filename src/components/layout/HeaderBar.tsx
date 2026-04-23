@@ -8,6 +8,7 @@ type HeaderBarProps = {
 
 export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
   const navigate = useNavigate();
+  const role = localStorage.getItem('silaras_role') ?? 'admin_puskesau';
 
   const handleLogout = async () => {
     await userLogService.log('logout', 'User logout dari sistem');
@@ -27,6 +28,7 @@ export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
           <Menu className="h-5 w-5" />
         </button>
         <div>
+          <p className="mb-1 inline-flex rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-semibold text-amber-700">Demo Local Mode</p>
           <p className="text-xs uppercase text-slate-500">Sistem Laporan RSAU</p>
           <h2 className="font-semibold">Komando Pelaporan Kesehatan</h2>
         </div>
@@ -39,7 +41,7 @@ export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
         </button>
         <button className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm sm:flex-none">
           <Search className="h-4 w-4" />
-          Cari RS
+          {role}
         </button>
         <button
           type="button"
