@@ -1,33 +1,31 @@
 import { ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { HospitalDashboardRecord } from '../types';
+import { SeverityBadge } from './SeverityBadge';
+import type { PriorityAlert } from '../types';
 
-function Panel({ title, tone, rows }: { title: string; tone: string; rows: HospitalDashboardRecord[] }) {
+export function PriorityAlertsPanel({ alerts, onOpenHospital }: { alerts: PriorityAlert[]; onOpenHospital: (hospitalId: string) => void }) {
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
+    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-soft dark:border-slate-800 dark:bg-slate-900">
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-semibold">{title}</h3>
-        <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${tone}`}>{rows.length}</span>
+        <h3 className="font-semibold">Peringatan Prioritas</h3>
+        <span className="rounded-full bg-rose-100 px-2.5 py-1 text-xs font-semibold text-rose-700 dark:bg-rose-950/50 dark:text-rose-200">{alerts.length} alerts</span>
       </div>
       <div className="space-y-2">
-        {rows.slice(0, 5).map((row) => (
-          <div key={row.id} className="rounded-xl border border-slate-100 bg-slate-50 p-2 text-sm dark:border-slate-800 dark:bg-slate-950/40">
-            <p className="font-medium">{row.name}</p>
-            <p className="text-xs text-slate-500">BOR {row.bor.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%</p>
-          </div>
+        {alerts.slice(0, 6).map((alert) => (
+          <article key={alert.id} className="rounded-xl border border-slate-200 p-3 dark:border-slate-700">
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <p className="text-sm font-semibold">{alert.hospitalName}</p>
+              <SeverityBadge severity={alert.severity} />
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-300">Kategori: <strong>{alert.category}</strong> · {alert.period}</p>
+            <p className="mt-1 text-xs text-slate-500">{alert.note}</p>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-[11px] text-slate-400">{new Date(alert.timestamp).toLocaleString('id-ID')}</span>
+              <Button variant="outline" onClick={() => onOpenHospital(alert.hospitalId)}>{alert.cta} <ChevronRight className="ml-1 h-3 w-3" /></Button>
+            </div>
+          </article>
         ))}
       </div>
-      <Button variant="outline" className="mt-3 w-full">Lihat detail <ChevronRight className="ml-1 h-4 w-4" /></Button>
-    </article>
-  );
-}
-
-export function PriorityAlertPanel({ notSubmitted, highBor, lowBor }: { notSubmitted: HospitalDashboardRecord[]; highBor: HospitalDashboardRecord[]; lowBor: HospitalDashboardRecord[]; }) {
-  return (
-    <section className="grid gap-3 xl:grid-cols-3">
-      <Panel title="Rumah sakit belum submit" tone="bg-amber-100 text-amber-700" rows={notSubmitted} />
-      <Panel title="BOR tinggi / critical" tone="bg-rose-100 text-rose-700" rows={highBor} />
-      <Panel title="BOR sangat rendah" tone="bg-cyan-100 text-cyan-700" rows={lowBor} />
     </section>
   );
 }

@@ -2,6 +2,8 @@ import { ReportStatus } from '@/types/domain';
 
 export type ReviewStatus = 'pending' | 'reviewed' | 'need_attention';
 export type BorRisk = 'critical' | 'warning' | 'normal' | 'low';
+export type AlertSeverity = 'tinggi' | 'sedang' | 'rendah';
+export type AlertCategory = 'BOR rendah' | 'BOR tinggi' | 'belum submit' | 'data janggal';
 
 export interface DiseaseReportItem {
   name: string;
@@ -33,6 +35,25 @@ export interface HospitalDashboardRecord {
     kel: number;
   };
   diseaseItems: DiseaseReportItem[];
+}
+
+export interface VerificationQueue {
+  menungguReview: number;
+  perluRevisi: number;
+  sudahApproved: number;
+  locked: number;
+}
+
+export interface PriorityAlert {
+  id: string;
+  hospitalId: string;
+  hospitalName: string;
+  category: AlertCategory;
+  severity: AlertSeverity;
+  period: string;
+  timestamp: string;
+  cta: string;
+  note: string;
 }
 
 export interface DashboardFilters {
