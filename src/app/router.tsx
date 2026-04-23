@@ -8,6 +8,7 @@ import { DiseaseFormPage } from '@/features/diseases/DiseaseFormPage';
 import { VerificationPage } from '@/features/review/VerificationPage';
 import { AnalyticsPage } from '@/features/analytics/AnalyticsPage';
 import { HospitalsMasterPage, PeriodsMasterPage, SettingsPage, UsersMasterPage } from '@/features/master-data/MasterPages';
+import { UserLogsPage } from '@/features/master-data/UserLogsPage';
 import { ExportsPage } from '@/features/dashboard/ExportsPage';
 import { ReportDetailPage } from '@/features/review/ReportDetailPage';
 
@@ -37,6 +38,7 @@ export function AppRouter() {
         <Route path="/analytics" element={<Shell><AnalyticsPage /></Shell>} />
         <Route path="/settings" element={<Shell><SettingsPage /></Shell>} />
         <Route path="/exports" element={<Shell><ExportsPage /></Shell>} />
+        <Route path="/logs" element={<Shell><UserLogsPage /></Shell>} />
       </Route>
     </Routes>
   );

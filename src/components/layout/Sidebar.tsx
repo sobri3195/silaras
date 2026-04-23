@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { Activity, ClipboardList, Hospital, ShieldCheck, FileOutput } from 'lucide-react';
+import { Activity, ClipboardList, Hospital, ShieldCheck, FileOutput, ScrollText } from 'lucide-react';
 import silarasLogo from '@/assets/silaras-logo.svg';
 
 type SidebarProps = {
@@ -12,6 +12,7 @@ const links = [
   { to: '/verification', label: 'Verifikasi', icon: ShieldCheck },
   { to: '/analytics', label: 'Analytics', icon: ClipboardList },
   { to: '/exports', label: 'Export', icon: FileOutput },
+  { to: '/logs', label: 'User Logs', icon: ScrollText },
 ];
 
 export function Sidebar({ onNavigate }: SidebarProps) {
