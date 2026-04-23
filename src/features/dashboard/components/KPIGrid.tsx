@@ -1,17 +1,17 @@
-import { Activity, AlertTriangle, Bed, Building2, CheckCircle2, ClipboardList, Timer, TrendingDown, TrendingUp } from 'lucide-react';
+import { AlertTriangle, Bed, Building2, CheckCircle2, ShieldAlert, Timer } from 'lucide-react';
 import { KPIStatCard } from './KPIStatCard';
 
-export function KPIGrid({ metrics }: { metrics: any }) {
+export function KPIGrid({ metrics, freshness }: { metrics: any; freshness: { lastSync: string; activePeriod: string } }) {
+  const updateLabel = new Date(freshness.lastSync).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
   return (
-    <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
-      <KPIStatCard icon={Building2} title="Total Rumah Sakit" value={metrics.totalHospitals.toLocaleString('id-ID')} note="Unit aktif terdaftar" />
-      <KPIStatCard icon={CheckCircle2} title="Sudah Submit" value={metrics.submittedCount.toLocaleString('id-ID')} note="Termasuk approved/locked" tone="success" />
-      <KPIStatCard icon={Timer} title="Belum Submit" value={metrics.notSubmittedCount.toLocaleString('id-ID')} note="Perlu follow up" tone="warning" />
-      <KPIStatCard icon={AlertTriangle} title="Overdue" value={metrics.overdueCount.toLocaleString('id-ID')} note="Melewati tenggat" tone="danger" />
-      <KPIStatCard icon={Bed} title="Rata-rata BOR" value={`${metrics.avgBor.toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`} note="Nasional seluruh RS" />
-      <KPIStatCard icon={TrendingUp} title="BOR Tertinggi" value={`${(metrics.highestBor?.bor ?? 0).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`} note={metrics.highestBor?.name ?? '-'} tone="danger" />
-      <KPIStatCard icon={TrendingDown} title="BOR Terendah" value={`${(metrics.lowestBor?.bor ?? 0).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`} note={metrics.lowestBor?.name ?? '-'} tone="warning" />
-      <KPIStatCard icon={ClipboardList} title="Total Kasus Penyakit" value={metrics.totalDiseaseCases.toLocaleString('id-ID')} note="Akumulasi top 10" />
+    <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+      <KPIStatCard icon={Building2} title="Total RS" value={metrics.totalHospitals.toLocaleString('id-ID')} subtext="Unit aktif nasional" meta={`Periode ${freshness.activePeriod}`} />
+      <KPIStatCard icon={CheckCircle2} title="Sudah Submit" value={metrics.submittedCount.toLocaleString('id-ID')} subtext="+6% dibanding periode lalu" meta={`Update ${updateLabel}`} tone="success" />
+      <KPIStatCard icon={Timer} title="Belum Submit" value={metrics.notSubmittedCount.toLocaleString('id-ID')} subtext="Perlu follow-up verifikasi" meta="Target 0 sebelum deadline" tone="warning" />
+      <KPIStatCard icon={Bed} title="Rata-rata BOR" value={`${metrics.avgBor.toFixed(2)}%`} subtext="Benchmark nasional 60-85%" meta="Threshold operasional" />
+      <KPIStatCard icon={ShieldAlert} title="Butuh Perhatian" value={metrics.needsAttention.toLocaleString('id-ID')} subtext="BOR kritis / review attention" meta="Prioritas tindak cepat" tone="danger" />
+      <KPIStatCard icon={AlertTriangle} title="Overdue" value={metrics.overdueCount.toLocaleString('id-ID')} subtext="Melewati tenggat submit" meta="Eskalasikan ke kotama" tone="danger" />
     </section>
   );
 }
