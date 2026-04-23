@@ -15,7 +15,7 @@ const createMissingConfigClient = (): SupabaseClient =>
   });
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error(missingEnvMessage);
+  console.warn(missingEnvMessage);
 }
 
 export const supabase =
