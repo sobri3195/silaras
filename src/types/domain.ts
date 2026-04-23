@@ -1,4 +1,4 @@
-export type UserRole = 'admin_puskesau' | 'admin_rs' | 'reviewer_kotama' | 'viewer_pimpinan';
+export type UserRole = 'admin_rs' | 'admin_pusat';
 export type ReportStatus = 'draft' | 'submitted' | 'revision_needed' | 'approved' | 'locked';
 
 export interface Hospital {

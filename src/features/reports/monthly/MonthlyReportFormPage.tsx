@@ -3,13 +3,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { DynamicReportRenderer, splitItems } from './components/DynamicReportRenderer';
 import { reportEngineStorage } from '@/services/report-engine-storage';
 import { reportWorkflowService } from '@/services/report-workflow-service';
+import { getSession } from '@/features/auth/session';
 
 export function MonthlyReportFormPage() {
   reportEngineStorage.init();
   const navigate = useNavigate();
   const { reportTypeCode } = useParams();
-  const actor = (localStorage.getItem('silaras_role') ?? 'admin_rs').toString();
-  const hospitalId = localStorage.getItem('silaras_hospital_id') ?? 'RS-001';
+  const session = getSession();
+  const actor = session?.role ?? 'admin_rs';
+  const hospitalId = session?.hospital_id ?? 'RS-001';
   const period = reportEngineStorage.getActivePeriod();
 
   const reportType = reportEngineStorage.listReportTypes().find((x) => x.code === reportTypeCode);
@@ -26,7 +28,7 @@ export function MonthlyReportFormPage() {
     return <div className="rounded-2xl border bg-white p-5">Template laporan tidak ditemukan.</div>;
   }
 
-  const readOnly = submission?.status === 'submitted' || submission?.status === 'approved' || submission?.status === 'locked';
+  const readOnly = submission?.status === 'submitted' || submission?.status === 'approved' || submission?.status === 'locked' || session?.role !== 'admin_rs';
 
   const handleSave = (mode: 'draft' | 'submit') => {
     try {

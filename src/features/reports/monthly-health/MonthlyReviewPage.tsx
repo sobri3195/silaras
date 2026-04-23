@@ -3,7 +3,7 @@ import { monthlyHealthReportStorage } from '@/services/monthly-health-report-sto
 
 export function MonthlyReviewPage() {
   monthlyHealthReportStorage.init();
-  const actor = (localStorage.getItem('silaras_role') ?? 'reviewer_kotama').toString();
+  const actor = (localStorage.getItem('silaras_role') ?? 'admin_pusat').toString();
   const hospitalId = 'RS-WIRIADINATA';
   const periodId = 'period-2026-04';
   const submissions = monthlyHealthReportStorage.listAttachmentSubmissions(hospitalId, periodId);

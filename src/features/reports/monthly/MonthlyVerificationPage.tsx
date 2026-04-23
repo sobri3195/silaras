@@ -10,7 +10,7 @@ export function MonthlyVerificationPage() {
     <div className="space-y-4 pb-8">
       <section className="rounded-2xl border bg-white p-5 shadow-soft">
         <h2 className="text-xl font-bold">Verification Dashboard - Bulanan</h2>
-        <p className="text-sm text-slate-500">Admin Puskesau dapat memfilter, review, revisi, approve, dan lock laporan.</p>
+        <p className="text-sm text-slate-500">Admin Pusat dapat memfilter, review, revisi, approve, dan lock laporan.</p>
       </section>
 
       <section className="rounded-2xl border bg-white p-4 shadow-soft">
