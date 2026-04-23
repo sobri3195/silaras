@@ -19,6 +19,8 @@ export function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/puskesau" element={<Navigate to="/dashboard/puskesau" replace />} />
+      <Route path="/rs" element={<Navigate to="/dashboard/rs" replace />} />
       <Route element={<ProtectedRoute />}>
         <Route path="/" element={<Navigate to="/dashboard/puskesau" replace />} />
         <Route path="/dashboard/puskesau" element={<Shell><PuskesauDashboardPage /></Shell>} />
