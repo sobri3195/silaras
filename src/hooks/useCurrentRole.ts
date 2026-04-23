@@ -1,5 +1,6 @@
 import type { UserRole } from '@/types/domain';
+import { getSession } from '@/features/auth/session';
 
 export function useCurrentRole(): UserRole {
-  return (localStorage.getItem('silaras_role') as UserRole | null) ?? 'admin_puskesau';
+  return getSession()?.role ?? 'admin_rs';
 }

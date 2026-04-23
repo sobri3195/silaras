@@ -116,6 +116,9 @@ export const reportWorkflowService = {
   },
 
   transition(submissionId: string, actor: string, action: 'request_revision' | 'approve' | 'lock', notes?: string) {
+    if (actor !== 'admin_pusat') {
+      throw new Error('Hanya admin pusat yang dapat melakukan review, approve, atau lock.');
+    }
     const all = reportEngineStorage.listSubmissions();
     const target = all.find((x) => x.id === submissionId);
     if (!target) throw new Error('Submission tidak ditemukan');

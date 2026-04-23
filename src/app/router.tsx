@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AppLayout } from '@/components/layout/AppLayout';
-import { LoginPage, ProtectedRoute, RoleGuard } from '@/features/auth/auth';
+import { ForbiddenPage, HospitalScopeGuard, LoginPage, ProtectedRoute, RoleGuard, UnauthorizedPage } from '@/features/auth/auth';
 import { PuskesauDashboardPage } from '@/features/dashboard/PuskesauDashboardPage';
 import { RsDashboardPage } from '@/features/dashboard/RsDashboardPage';
 import { BorFormPage } from '@/features/bor/BorFormPage';
@@ -31,12 +31,14 @@ export function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/puskesau" element={<Navigate to="/dashboard/puskesau" replace />} />
+      <Route path="/unauthorized" element={<Shell><UnauthorizedPage /></Shell>} />
+      <Route path="/forbidden" element={<Shell><ForbiddenPage /></Shell>} />
+      <Route path="/pusat" element={<Navigate to="/dashboard/pusat" replace />} />
       <Route path="/rs" element={<Navigate to="/dashboard/rs" replace />} />
       <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<Navigate to="/dashboard/puskesau" replace />} />
-        <Route element={<RoleGuard allow={[...ACCESS_CONTROL.dashboardPuskesau]} />}>
-          <Route path="/dashboard/puskesau" element={<Shell><PuskesauDashboardPage /></Shell>} />
+        <Route path="/" element={<Navigate to="/dashboard/rs" replace />} />
+        <Route element={<RoleGuard allow={[...ACCESS_CONTROL.dashboardPusat]} />}>
+          <Route path="/dashboard/pusat" element={<Shell><PuskesauDashboardPage /></Shell>} />
         </Route>
         <Route element={<RoleGuard allow={[...ACCESS_CONTROL.dashboardRs]} />}>
           <Route path="/dashboard/rs" element={<Shell><RsDashboardPage /></Shell>} />
@@ -51,8 +53,12 @@ export function AppRouter() {
           <Route path="/reports/monthly" element={<Shell><MonthlyReportsListPage /></Shell>} />
           <Route path="/reports/monthly/preview/:submissionId" element={<Shell><MonthlyPreviewPage /></Shell>} />
           <Route path="/reports/monthly/:reportTypeCode" element={<Shell><MonthlyReportFormPage /></Shell>} />
-          <Route path="/reports/monthly/:reportTypeCode/:submissionId" element={<Shell><MonthlySubmissionDetailPage /></Shell>} />
-          <Route path="/reports/:hospitalId/:periodId" element={<Shell><ReportDetailPage /></Shell>} />
+          <Route element={<HospitalScopeGuard />}>
+            <Route path="/reports/monthly/:reportTypeCode/:submissionId" element={<Shell><MonthlySubmissionDetailPage /></Shell>} />
+          </Route>
+          <Route element={<HospitalScopeGuard />}>
+            <Route path="/reports/:hospitalId/:periodId" element={<Shell><ReportDetailPage /></Shell>} />
+          </Route>
         </Route>
         <Route element={<RoleGuard allow={[...ACCESS_CONTROL.monthlyNarrative]} />}>
           <Route path="/reports/monthly/narrative" element={<Shell><MonthlyNarrativePage /></Shell>} />

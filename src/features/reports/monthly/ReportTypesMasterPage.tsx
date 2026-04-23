@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { reportEngineStorage } from '@/services/report-engine-storage';
+import { userLogService } from '@/services/user-log-service';
 
 export function ReportTypesMasterPage() {
   reportEngineStorage.init();
@@ -10,10 +11,12 @@ export function ReportTypesMasterPage() {
     const next = types.map((type) => (type.id === id ? { ...type, is_active: !type.is_active, updated_at: new Date().toISOString() } : type));
     setTypes(next);
     reportEngineStorage.saveReportTypes(next);
+    void userLogService.log('master_data_update', `Toggle report type ${id}`);
   };
 
   const doExport = () => {
     const blob = new Blob([reportEngineStorage.exportJson()], { type: 'application/json' });
+    void userLogService.log('master_data_update', 'Export master report type JSON');
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
     link.download = 'silaras-report-engine-export.json';
@@ -27,10 +30,9 @@ export function ReportTypesMasterPage() {
         <h2 className="text-xl font-bold">Master Report Types</h2>
         <p className="text-sm text-slate-500">Kelola aktif/nonaktif, reset template/submission, export/import JSON, dan dev panel localStorage.</p>
         <div className="mt-3 flex flex-wrap gap-2">
-          <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => { reportEngineStorage.resetTemplates(); setTypes(reportEngineStorage.listReportTypes()); }}>Reset Templates</button>
-          <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => { reportEngineStorage.resetSubmissions(); }}>Reset Submissions</button>
+          <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => { reportEngineStorage.resetTemplates(); setTypes(reportEngineStorage.listReportTypes()); void userLogService.log('master_data_update', 'Reset templates'); }}>Reset Templates</button>
+          <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => { reportEngineStorage.resetSubmissions(); void userLogService.log('master_data_update', 'Reset submissions'); }}>Reset Submissions</button>
           <button className="rounded-xl border px-3 py-2 text-sm" onClick={doExport}>Export JSON</button>
-          <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => localStorage.setItem('silaras_role', localStorage.getItem('silaras_role') === 'admin_rs' ? 'admin_puskesau' : 'admin_rs')}>Switch User</button>
         </div>
       </section>
 
@@ -71,6 +73,7 @@ export function ReportTypesMasterPage() {
             if (!importValue.trim()) return;
             reportEngineStorage.importJson(importValue);
             setTypes(reportEngineStorage.listReportTypes());
+            void userLogService.log('master_data_update', 'Import master report type JSON');
           }}
         >
           Import

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { reportEngineStorage } from '@/services/report-engine-storage';
+import { getSession } from '@/features/auth/session';
 import type { ReportSubmissionStatus } from '@/types/report-engine';
 
 const statusClass: Record<ReportSubmissionStatus | 'not_started', string> = {
@@ -14,10 +15,13 @@ const statusClass: Record<ReportSubmissionStatus | 'not_started', string> = {
 
 export function MonthlyReportsListPage() {
   reportEngineStorage.init();
-  const hospitalId = localStorage.getItem('silaras_hospital_id') ?? 'RS-001';
+  const session = getSession();
+  const hospitalId = session?.hospital_id ?? 'RS-001';
   const activePeriod = reportEngineStorage.getActivePeriod();
   const types = reportEngineStorage.listReportTypes();
-  const submissions = reportEngineStorage.listSubmissions().filter((x) => x.hospital_id === hospitalId && x.reporting_period_id === activePeriod?.id);
+  const submissions = reportEngineStorage
+    .listSubmissions()
+    .filter((x) => (session?.role === 'admin_rs' ? x.hospital_id === hospitalId : true) && x.reporting_period_id === activePeriod?.id);
   const [category, setCategory] = useState('all');
 
   const rows = useMemo(() => types
@@ -42,7 +46,7 @@ export function MonthlyReportsListPage() {
             <option value="all">Semua kategori</option>
             <option value="pelayanan_kesehatan">Pelayanan Kesehatan</option>
           </select>
-          <Link to="/master/report-types" className="rounded-xl border px-3 py-2 text-sm">Master Report Types</Link>
+          {session?.role === 'admin_pusat' ? <Link to="/master/report-types" className="rounded-xl border px-3 py-2 text-sm">Master Report Types</Link> : null}
         </div>
       </section>
 

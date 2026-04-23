@@ -9,7 +9,7 @@ type SidebarProps = {
 };
 
 const links = [
-  { to: '/dashboard/puskesau', label: 'Dashboard Pusat', icon: Activity, allow: ACCESS_CONTROL.dashboardPuskesau },
+  { to: '/dashboard/pusat', label: 'Dashboard Pusat', icon: Activity, allow: ACCESS_CONTROL.dashboardPusat },
   { to: '/dashboard/rs', label: 'Dashboard RS', icon: Hospital, allow: ACCESS_CONTROL.dashboardRs },
   { to: '/verification', label: 'Verifikasi', icon: ShieldCheck, allow: ACCESS_CONTROL.verification },
   { to: '/reports/monthly', label: 'Laporan Bulanan', icon: Files, allow: ACCESS_CONTROL.monthlyReports },

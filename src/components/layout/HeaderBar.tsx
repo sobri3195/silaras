@@ -1,6 +1,7 @@
 import { CalendarDays, LogOut, Menu, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { userLogService } from '@/services/user-log-service';
+import { clearSession, getSession } from '@/features/auth/session';
 
 type HeaderBarProps = {
   onToggleSidebar?: () => void;
@@ -8,11 +9,14 @@ type HeaderBarProps = {
 
 export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
   const navigate = useNavigate();
-  const role = localStorage.getItem('silaras_role') ?? 'admin_puskesau';
+  const session = getSession();
 
   const handleLogout = async () => {
-    await userLogService.log('logout', 'User logout dari sistem');
-    localStorage.removeItem('silaras_role');
+    await userLogService.log('logout', 'User logout dari sistem', {
+      email: session?.email,
+      hospital_id: session?.hospital_id,
+    });
+    clearSession();
     navigate('/login', { replace: true });
   };
 
@@ -41,7 +45,7 @@ export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
         </button>
         <button className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm sm:flex-none">
           <Search className="h-4 w-4" />
-          {role}
+          {session?.role ?? 'guest'}{session?.hospital_id ? ` • ${session.hospital_id}` : ''}
         </button>
         <button
           type="button"

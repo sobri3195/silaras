@@ -8,7 +8,13 @@ export type UserLogAction =
   | 'create'
   | 'update'
   | 'delete'
-  | 'submit';
+  | 'submit'
+  | 'review'
+  | 'request_revision'
+  | 'approve'
+  | 'lock'
+  | 'master_data_update'
+  | 'forbidden';
 
 export interface UserActivityLog {
   id: string;
@@ -40,6 +46,15 @@ function writeLogs(logs: UserActivityLog[]) {
 }
 
 function currentRole() {
+  try {
+    const sessionRaw = localStorage.getItem('silaras_session');
+    if (sessionRaw) {
+      const session = JSON.parse(sessionRaw) as { role?: string };
+      return session.role ?? 'guest';
+    }
+  } catch {
+    // ignore parse failure
+  }
   return localStorage.getItem('silaras_role') ?? 'guest';
 }
 

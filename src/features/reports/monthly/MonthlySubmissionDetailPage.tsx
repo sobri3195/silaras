@@ -2,11 +2,14 @@ import { useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { reportEngineStorage } from '@/services/report-engine-storage';
 import { reportWorkflowService } from '@/services/report-workflow-service';
+import { getSession } from '@/features/auth/session';
+import { userLogService } from '@/services/user-log-service';
 
 export function MonthlySubmissionDetailPage() {
   reportEngineStorage.init();
   const navigate = useNavigate();
-  const actor = (localStorage.getItem('silaras_role') ?? 'admin_puskesau').toString();
+  const session = getSession();
+  const actor = session?.role ?? 'admin_rs';
   const { reportTypeCode, submissionId } = useParams();
 
   const reportType = reportEngineStorage.listReportTypes().find((x) => x.code === reportTypeCode);
@@ -21,8 +24,12 @@ export function MonthlySubmissionDetailPage() {
     return <div className="rounded-2xl border bg-white p-5">Submission tidak ditemukan.</div>;
   }
 
+  const canReview = session?.role === 'admin_pusat';
+
   const doAction = (action: 'request_revision' | 'approve' | 'lock') => {
+    if (!canReview) return;
     reportWorkflowService.transition(submission.id, actor, action, note || undefined);
+    void userLogService.log(action, `Aksi ${action} untuk submission ${submission.id}`, { submission_id: submission.id, hospital_id: submission.hospital_id });
     navigate(0);
   };
 
@@ -61,12 +68,16 @@ export function MonthlySubmissionDetailPage() {
         <article className="rounded-2xl border bg-white p-5 shadow-soft">
           <h4 className="font-semibold">Review Workflow</h4>
           <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={4} placeholder="Catatan reviewer" className="mt-3 w-full rounded-xl border p-2 text-sm" />
-          <div className="mt-3 grid gap-2">
-            <button onClick={() => doAction('request_revision')} className="rounded-xl bg-amber-500 px-3 py-2 text-sm text-white">Request Revision</button>
-            <button onClick={() => doAction('approve')} className="rounded-xl bg-emerald-600 px-3 py-2 text-sm text-white">Approve</button>
-            <button onClick={() => doAction('lock')} className="rounded-xl bg-primary px-3 py-2 text-sm text-white">Lock</button>
-            <Link to={`/reports/monthly/${reportType.code}`} className="rounded-xl border px-3 py-2 text-center text-sm">Buka Form</Link>
-          </div>
+          {canReview ? (
+            <div className="mt-3 grid gap-2">
+              <button onClick={() => doAction('request_revision')} className="rounded-xl bg-amber-500 px-3 py-2 text-sm text-white">Request Revision</button>
+              <button onClick={() => doAction('approve')} className="rounded-xl bg-emerald-600 px-3 py-2 text-sm text-white">Approve</button>
+              <button onClick={() => doAction('lock')} className="rounded-xl bg-primary px-3 py-2 text-sm text-white">Lock</button>
+              <Link to={`/reports/monthly/${reportType.code}`} className="rounded-xl border px-3 py-2 text-center text-sm">Buka Form</Link>
+            </div>
+          ) : (
+            <p className="mt-3 text-xs text-slate-500">Admin RS hanya dapat melihat detail dan menindaklanjuti revisi melalui form.</p>
+          )}
         </article>
 
         <article className="rounded-2xl border bg-white p-5 shadow-soft">
