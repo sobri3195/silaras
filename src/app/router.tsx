@@ -16,6 +16,11 @@ import { MonthlyReportFormPage } from '@/features/reports/monthly/MonthlyReportF
 import { MonthlySubmissionDetailPage } from '@/features/reports/monthly/MonthlySubmissionDetailPage';
 import { MonthlyVerificationPage } from '@/features/reports/monthly/MonthlyVerificationPage';
 import { ReportTypesMasterPage } from '@/features/reports/monthly/ReportTypesMasterPage';
+import { MonthlyNarrativePage } from '@/features/reports/monthly-health/MonthlyNarrativePage';
+import { MonthlyAttachmentsPage } from '@/features/reports/monthly-health/MonthlyAttachmentsPage';
+import { MonthlyAttachmentDetailPage } from '@/features/reports/monthly-health/MonthlyAttachmentDetailPage';
+import { MonthlyReviewPage } from '@/features/reports/monthly-health/MonthlyReviewPage';
+import { MonthlyPreviewPage } from '@/features/reports/monthly-health/MonthlyPreviewPage';
 
 function Shell({ children }: { children: React.ReactNode }) {
   return <AppLayout>{children}</AppLayout>;
@@ -34,6 +39,11 @@ export function AppRouter() {
         <Route path="/reports/bor" element={<Shell><BorFormPage /></Shell>} />
         <Route path="/reports/diseases" element={<Shell><DiseaseFormPage /></Shell>} />
         <Route path="/reports/monthly" element={<Shell><MonthlyReportsListPage /></Shell>} />
+        <Route path="/reports/monthly/narrative" element={<Shell><MonthlyNarrativePage /></Shell>} />
+        <Route path="/reports/monthly/attachments" element={<Shell><MonthlyAttachmentsPage /></Shell>} />
+        <Route path="/reports/monthly/attachments/:code" element={<Shell><MonthlyAttachmentDetailPage /></Shell>} />
+        <Route path="/reports/monthly/review" element={<Shell><MonthlyReviewPage /></Shell>} />
+        <Route path="/reports/monthly/preview/:submissionId" element={<Shell><MonthlyPreviewPage /></Shell>} />
         <Route path="/reports/monthly/:reportTypeCode" element={<Shell><MonthlyReportFormPage /></Shell>} />
         <Route path="/reports/monthly/:reportTypeCode/:submissionId" element={<Shell><MonthlySubmissionDetailPage /></Shell>} />
         <Route path="/reports/:hospitalId/:periodId" element={<Shell><ReportDetailPage /></Shell>} />

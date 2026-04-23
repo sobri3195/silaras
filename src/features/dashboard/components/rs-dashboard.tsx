@@ -669,6 +669,7 @@ export function RsDashboardContent() {
           <div className="flex gap-2">
             <Button variant="outline">Lihat Panduan</Button>
             <Button onClick={() => (window.location.href = '/reports/bor')}>Buka Laporan</Button>
+            <Button variant="outline" onClick={() => (window.location.href = '/reports/monthly/attachments')}>Laporan Bulanan Satkes</Button>
           </div>
         </div>
       </header>
@@ -681,6 +682,23 @@ export function RsDashboardContent() {
         <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Revisi</p><p className="text-lg font-bold">{monthly.revisi}</p></article>
         <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Approved</p><p className="text-lg font-bold">{monthly.approved}</p></article>
         <article className="rounded-2xl border bg-white p-3 shadow-soft"><p className="text-xs text-slate-500">Belum Masuk</p><p className="text-lg font-bold">{monthly.belumMasuk}</p></article>
+      </section>
+      <section className="grid gap-3 md:grid-cols-3">
+        <article className="rounded-2xl border bg-white p-4 shadow-soft">
+          <p className="text-xs text-slate-500">Shortcut</p>
+          <p className="font-semibold">Laporan Bulanan Satkes</p>
+          <Button className="mt-3" onClick={() => (window.location.href = '/reports/monthly/narrative')}>Buka Naratif</Button>
+        </article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft">
+          <p className="text-xs text-slate-500">Progress lampiran</p>
+          <p className="text-2xl font-bold">{monthly.masuk}/{monthly.wajib}</p>
+          <p className="text-xs text-slate-500">Termasuk lampiran yang sudah submit/approved/locked.</p>
+        </article>
+        <article className="rounded-2xl border bg-white p-4 shadow-soft">
+          <p className="text-xs text-slate-500">Laporan belum diisi</p>
+          <p className="text-2xl font-bold">{monthly.belumMasuk}</p>
+          <Button variant="outline" className="mt-3" onClick={() => (window.location.href = '/reports/monthly/attachments')}>Lihat Lampiran</Button>
+        </article>
       </section>
 
       <QuickActionButtons

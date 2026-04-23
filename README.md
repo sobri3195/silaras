@@ -65,6 +65,15 @@ SiLaras kini memiliki **modul report engine** untuk laporan bulanan lampiran RS/
 - banner `Demo Local Mode`
 - dev panel isi localStorage engine
 
+## Monthly Health Report Module (Satkes)
+
+Modul baru untuk laporan bulanan satkes (naratif + lampiran tabular KES/A-xx/BL) tersedia pada route:
+- `/reports/monthly/narrative`
+- `/reports/monthly/attachments`
+- `/reports/monthly/review`
+
+Dokumentasi lengkap: `docs/monthly-health-report-module.md`.
+
 ## Akun Demo
 - Admin Puskesau: `admin.puskesau@silaras.mil.id`
 - Admin RS: `admin.rs@silaras.mil.id`
