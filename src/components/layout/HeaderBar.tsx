@@ -1,10 +1,20 @@
-import { CalendarDays, Menu, Search } from 'lucide-react';
+import { CalendarDays, LogOut, Menu, Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { userLogService } from '@/services/user-log-service';
 
 type HeaderBarProps = {
   onToggleSidebar?: () => void;
 };
 
 export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await userLogService.log('logout', 'User logout dari sistem');
+    localStorage.removeItem('silaras_role');
+    navigate('/login', { replace: true });
+  };
+
   return (
     <header className="sticky top-0 z-10 mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border bg-white px-4 py-3 shadow-soft dark:border-slate-800 dark:bg-slate-900 sm:mb-6 sm:px-5">
       <div className="flex items-center gap-3">
@@ -30,6 +40,16 @@ export function HeaderBar({ onToggleSidebar }: HeaderBarProps) {
         <button className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-2 text-sm sm:flex-none">
           <Search className="h-4 w-4" />
           Cari RS
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            void handleLogout();
+          }}
+          className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border border-rose-200 px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 sm:flex-none"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
         </button>
       </div>
     </header>
