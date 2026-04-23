@@ -1,9 +1,16 @@
-import { PropsWithChildren, useState } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { HeaderBar } from './HeaderBar';
+import { userLogService } from '@/services/user-log-service';
 
 export function AppLayout({ children }: PropsWithChildren) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    void userLogService.log('page_view', `Membuka halaman ${location.pathname}`);
+  }, [location.pathname]);
 
   return (
     <div className="flex min-h-screen bg-slate-100 dark:bg-slate-950">

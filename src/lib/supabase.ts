@@ -23,6 +23,7 @@ const db: Record<string, Row[]> = {
     { id: 'd-1', disease_report_id: 'dis-apr-rs1', ranking: 1, nama_penyakit_raw: 'Hipertensi', jumlah_tni: 53, jumlah_pns: 17, jumlah_kel: 38, jumlah_total: 108 },
     { id: 'd-2', disease_report_id: 'dis-apr-rs1', ranking: 2, nama_penyakit_raw: 'DM tipe 2', jumlah_tni: 21, jumlah_pns: 12, jumlah_kel: 11, jumlah_total: 44 },
   ],
+  activity_logs: [],
 };
 
 function applyFilters(rows: Row[], filters: Filter[]) {
@@ -49,7 +50,7 @@ class QueryBuilder {
 
   constructor(
     private readonly table: string,
-    private readonly action: 'select' | 'update' | 'upsert',
+    private readonly action: 'select' | 'update' | 'upsert' | 'insert',
     private readonly payload?: Row,
   ) {}
 
@@ -104,6 +105,14 @@ class QueryBuilder {
       return { data: [insertRow], error: null };
     }
 
+
+    if (this.action === 'insert') {
+      const payload = this.payload ?? {};
+      const insertRow = { ...payload, id: payload.id ?? crypto.randomUUID(), created_at: new Date().toISOString() };
+      tableRows.push(insertRow);
+      return { data: [insertRow], error: null };
+    }
+
     const rows = withRelations(this.table, applyFilters(tableRows, this.filters));
     return { data: this.limitCount ? rows.slice(0, this.limitCount) : rows, error: null };
   }
@@ -122,6 +131,7 @@ export const supabase = {
       select: (_columns?: string) => new QueryBuilder(table, 'select'),
       update: (payload: Row) => new QueryBuilder(table, 'update', payload),
       upsert: (payload: Row, _options?: Row) => new QueryBuilder(table, 'upsert', payload),
+      insert: (payload: Row) => new QueryBuilder(table, 'insert', payload),
     };
   },
 };

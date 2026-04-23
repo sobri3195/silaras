@@ -1,11 +1,14 @@
+import { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import type { UserRole } from '@/types/domain';
+import { userLogService } from '@/services/user-log-service';
 
 const demoRole = (localStorage.getItem('silaras_role') as UserRole | null) ?? 'admin_puskesau';
 
 export function LoginPage() {
   const loginAs = (role: UserRole) => {
     localStorage.setItem('silaras_role', role);
+    void userLogService.log('login', `User login sebagai ${role}`, { role });
     window.location.href = role === 'admin_rs' ? '/dashboard/rs' : '/dashboard/puskesau';
   };
 
@@ -25,6 +28,13 @@ export function LoginPage() {
 
 export function ProtectedRoute() {
   const role = localStorage.getItem('silaras_role');
+
+  useEffect(() => {
+    if (role) {
+      void userLogService.log('session_start', 'Sesi user aktif');
+    }
+  }, [role]);
+
   return role ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
